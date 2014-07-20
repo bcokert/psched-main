@@ -7,4 +7,4 @@ This is the main server, which acts as the user hub. It has an area where you ca
 
 ![Screenshot of Main Page](Main Interface.png "Main Page")
 
-The main server never posts messages, just schedules them. They are queued on the dispatcher server, which will later post them to the main server via a backend api. The time displayed on a post is not the scheduled time, but the post time.
+The main server posts messages, but the user is not able to do it via a standard interface. Instead they just schedule them. They are queued on the dispatcher server, which will later ask the main server to post them to the via a POST request. The time displayed on a post is not the scheduled time, but the post time.
