@@ -1,39 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Post Message Result</title>
-</head>
-<body>
-
 <?php
 // POST message=... username=...
-if ($_POST["username"] and strlen($_POST["username"]) >= 1 and $_POST["message"] and strlen($_POST["message"]) > 1) {
-    echo "<p>Posting message with username=" . $_POST["username"] . " and message=" . $_POST["message"] . "</p>\n";
+
+$json = array();
+foreach ($_POST as $key=>$value) {
+    $json["received"][$key] = urldecode($value);
+}
+
+if ($json["received"]["username"] and strlen($json["received"]["username"]) >= 1
+    and $json["received"]["message"] and strlen($json["received"]["message"]) > 1) {
+
     $mysqli = new mysqli("localhost", "psched-poster", "psched4brandon", "psched");
     if (mysqli_connect_errno()) {
-        echo "<p>Failed to connect to database: " . mysqli_connect_error() . "</p>\n";
+        $json["failure"] = "Failed to connect to database: " . mysqli_connect_error();
+        $json["result"] = "Failure";
     } else {
         if (!($update = $mysqli->prepare("INSERT INTO feed (poster_name, message) values (?, ?)"))) {
-            echo "<p>Failed to create SQL statement</p>\n";
+            $json["failure"] = "Failed to create SQL statement";
+            $json["result"] = "Failure";
         } else {
-            $update->bind_param("ss", $_POST["username"], $_POST["message"]);
+            $update->bind_param("ss", $json["received"]["username"], $json["received"]["message"]);
             if (!$update->execute()) {
-                echo "<p>Failed to post message. Error: " . mysqli_error() . "</p>\n";
+                $json["failure"] = "Failed to post message. Error: " . mysqli_error();
+                $json["result"] = "Failure";
             } else {
-                echo "<p>Success!</p>\n";
+                $json["result"] = "Success";
             }
         }
     }
 } else {
-    echo "<p>Invalid Post. Expected two non-zero strings (username, message). Received: </p>\n";
-    echo "<ul>";
-    foreach ($_POST as $key=>$value) {
-        echo "<li>" . $key . "=" . $value . "</li>\n";
-    }
-    echo "</ul>";
+    $json["result"] = "Faiulre";
+    $json["failure"] = "Invalid Post. Expected two non-zero strings (username, message)";
 }
+
+echo json_encode($json);
 ?>
 
-</body>
-</html>
