@@ -11,7 +11,7 @@
 <div class="content">
     <div class="scheduler">
         <h3 class="compose-header">Create a Scheduled Message</h3>
-        <form id="schedule-message-form" method="post" action="ScheduleMessage.php">
+        <form id="schedule-message-form" method="post" action="scheduleMessage.php">
             <textarea class="message-compose" placeholder="Enter Message to be scheduled here." name="message"></textarea>
             <input type="text" name="username" placeholder="Enter Your Name Here">
             <h3 class="compose-header">Select a Time to Post Your Message</h3>
