@@ -28,7 +28,7 @@ if ($json["received"]["username"] and strlen($json["received"]["username"]) >= 1
         }
     }
 } else {
-    $json["result"] = "Faiulre";
+    $json["result"] = "Failure";
     $json["failure"] = "Invalid Post. Expected two non-zero strings (username, message)";
 }
 
